@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>登入 — 浪浪救援</title>
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="auth-page">
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-logo">🐾</div>
+    <h1 class="auth-title">浪浪救援平台</h1>
+    <p class="auth-subtitle">登入以回報或處理救援個案</p>
+
+    <div id="err-msg" class="alert alert-error" style="display:none"></div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="email" placeholder="your@email.com" autocomplete="email">
+    </div>
+    <div class="form-group">
+      <label>密碼</label>
+      <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="btn-primary full" id="btn-login">登入</button>
+
+    <div class="divider">或</div>
+
+    <a href="/auth/line" class="btn-line full">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg" width="20" alt="LINE">
+      使用 LINE 登入
+    </a>
+
+    <p class="auth-footer">還沒有帳號？<a href="/register">立即註冊</a></p>
+    <p class="auth-footer"><a href="/cases" style="color:#aaa;font-size:12px;">不登入，先瀏覽個案 →</a></p>
+  </div>
+</div>
+
+<script src="/static/js/auth.js"></script>
+</body>
+</html>

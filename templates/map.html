@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}地圖 — 浪浪救援{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+{% endblock %}
+{% block content %}
+<div class="map-page">
+  <div class="map-sidebar">
+    <h2>個案地圖</h2>
+    <div class="filters">
+      <select id="map-filter-status">
+        <option value="">全部狀態</option>
+        <option value="open">待處理</option>
+        <option value="handled">已處理</option>
+      </select>
+      <select id="map-filter-animal">
+        <option value="">全部動物</option>
+        <option value="狗">狗</option>
+        <option value="貓">貓</option>
+      </select>
+    </div>
+    <div id="map-case-list" class="map-case-list"></div>
+  </div>
+  <div id="map-view"></div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="/static/js/map.js"></script>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}回報個案 — 浪浪救援{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+{% endblock %}
+{% block content %}
+<div class="report-wrap">
+  <h1>回報救援個案</h1>
+
+  <div id="err-msg" class="alert alert-error" style="display:none"></div>
+  <div id="ok-msg"  class="alert alert-ok"    style="display:none"></div>
+
+  <div class="form-group">
+    <label>標題 <span class="required">*</span></label>
+    <input type="text" id="title" placeholder="例：淡水發現受傷流浪狗">
+  </div>
+
+  <div class="form-group">
+    <label>動物種類</label>
+    <select id="animal-type">
+      <option value="不明">不明</option>
+      <option value="狗">狗</option>
+      <option value="貓">貓</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>詳細描述</label>
+    <textarea id="description" rows="4" placeholder="請描述動物狀況、發現地點細節等..."></textarea>
+  </div>
+
+  <div class="form-group">
+    <label>地點（點擊地圖標記，或輸入地址）</label>
+    <input type="text" id="location-text" placeholder="例：新北市淡水區中正路100號">
+    <div id="report-map"></div>
+    <p class="hint" id="latlng-hint"></p>
+  </div>
+
+  <div class="form-group">
+    <label>圖片網址（選填）</label>
+    <input type="url" id="image-url" placeholder="https://...">
+  </div>
+
+  <button class="btn-primary" id="btn-submit">送出回報</button>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="/static/js/report.js"></script>
+{% endblock %}

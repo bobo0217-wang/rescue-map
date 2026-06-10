@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}浪浪救援平台{% endblock %}</title>
+<link rel="stylesheet" href="/static/css/style.css">
+{% block head %}{% endblock %}
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="nav-logo" href="/cases">🐾 浪浪救援</a>
+  <div class="nav-links">
+    <a href="/cases" class="nav-link">個案清單</a>
+    <a href="/map"   class="nav-link">地圖</a>
+    <a href="/report" class="nav-link" id="nav-report" style="display:none">回報個案</a>
+  </div>
+  <div class="nav-user" id="nav-user">
+    <a href="/login" class="btn-outline" id="btn-login">登入</a>
+    <div class="user-info" id="user-info" style="display:none">
+      <img id="user-avatar" src="" alt="" class="avatar-sm">
+      <span id="user-name"></span>
+      <button class="btn-ghost" id="btn-logout">登出</button>
+    </div>
+  </div>
+</nav>
+
+<main class="main-content">
+  {% block content %}{% endblock %}
+</main>
+
+<script>
+// 全站共用：載入登入狀態
+async function loadUserState() {
+  const res  = await fetch("/auth/me", { credentials: "include" });
+  const data = await res.json();
+  const btnLogin  = document.getElementById("btn-login");
+  const userInfo  = document.getElementById("user-info");
+  const navReport = document.getElementById("nav-report");
+
+  if (data.logged_in) {
+    btnLogin.style.display = "none";
+    userInfo.style.display = "flex";
+    navReport.style.display = "inline";
+    document.getElementById("user-name").textContent = data.username;
+    const av = document.getElementById("user-avatar");
+    if (data.avatar_url) { av.src = data.avatar_url; av.style.display = "block"; }
+    window._currentUser = data;
+  } else {
+    window._currentUser = null;
+  }
+}
+
+document.getElementById("btn-logout")?.addEventListener("click", async () => {
+  await fetch("/auth/logout", { method: "POST", credentials: "include" });
+  location.href = "/login";
+});
+
+loadUserState();
+</script>
+
+{% block scripts %}{% endblock %}
+</body>
+</html>
