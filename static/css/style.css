@@ -175,3 +175,28 @@ body.auth-page {
 }
 .auth-logo    { font-size: 48px; text-align: center; margin-bottom: 8px; }
 .auth-subtitle { font-size: 13px; color: #888; text-align: center; margin-bottom: 24px; margin-top: -8px; }
+
+/* ── Shelter cards ───────────────────────────────────────── */
+.shelter-card {
+  background: #fff; border: 1px solid #e0e0d8; border-radius: 12px;
+  overflow: hidden; transition: box-shadow .15s, transform .15s;
+}
+.shelter-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.1); transform: translateY(-2px); }
+.shelter-header {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 16px 16px 10px; border-bottom: 1px solid #f0f0e8;
+}
+.shelter-icon { font-size: 28px; }
+.shelter-name { font-size: 15px; font-weight: 600; color: #1a1a1a; line-height: 1.3; }
+.shelter-county { font-size: 12px; color: #999; margin-top: 2px; }
+.shelter-body { padding: 12px 16px; display: flex; flex-direction: column; gap: 6px; }
+.shelter-row { display: flex; gap: 8px; font-size: 13px; color: #444; align-items: flex-start; }
+.shelter-label { color: #888; white-space: nowrap; }
+.shelter-tel { color: #1a6b4a; }
+.shelter-footer {
+  padding: 10px 16px 14px; display: flex; gap: 8px;
+  border-top: 1px solid #f0f0e8;
+}
+.count-badge { font-size: 12px; padding: 4px 12px; border-radius: 20px; font-weight: 500; }
+.badge-dog { background: #fde8cc; color: #c47a0a; }
+.badge-cat { background: #e8eafd; color: #5a4fc4; }

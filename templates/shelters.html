@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}收容所資訊 — 浪浪救援{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>🏠 全台收容所</h1>
+  <div class="filters">
+    <input type="text" id="search-input" placeholder="🔍 搜尋收容所名稱或地址..." style="min-width:220px;">
+  </div>
+  <div id="shelter-count" style="font-size:13px;color:#888;margin-left:auto;"></div>
+</div>
+
+<div id="shelters-grid" class="cases-grid">
+  <div class="loading-spinner">載入中...</div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="/static/js/shelters.js"></script>{% endblock %}

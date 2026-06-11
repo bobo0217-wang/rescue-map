@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 import os
 from flask import Flask, render_template, session, jsonify
 from flask_cors import CORS
@@ -35,6 +38,10 @@ def index():
 @app.route("/cases")
 def cases_page():
     return render_template("cases.html")
+
+@app.route("/shelters")
+def shelters_page():
+    return render_template("shelters.html")
 
 @app.route("/map")
 def map_page():

@@ -1,10 +1,10 @@
 let allCases = [];
 
-const grid    = document.getElementById("cases-grid");
-const overlay = document.getElementById("modal-overlay");
+const grid         = document.getElementById("cases-grid");
+const overlay      = document.getElementById("modal-overlay");
 const modalContent = document.getElementById("modal-content");
 
-// ── 載入個案 ──────────────────────────────────────────────
+// ── 載入個案（預設排除 moa 收容所資料）────────────────────
 async function loadCases() {
   const status = document.getElementById("filter-status").value;
   const animal = document.getElementById("filter-animal").value;
@@ -13,19 +13,36 @@ async function loadCases() {
   let url = "/api/cases?";
   if (status) url += `status=${status}&`;
   if (animal) url += `animal_type=${encodeURIComponent(animal)}&`;
-  if (source) url += `source=${source}&`;
+  if (source) {
+    url += `source=${source}&`;
+  } else {
+    // 沒有選來源時，同時撈 user 和 ptt（排除 moa）
+    url += `source=user&`;
+  }
 
   grid.innerHTML = '<div class="loading-spinner">載入中...</div>';
-  const res   = await fetch(url, { credentials: "include" });
-  allCases    = await res.json();
+  let res   = await fetch(url, { credentials: "include" });
+  let cases = await res.json();
+
+  // 如果沒選來源，再撈一次 ptt 合併
+  if (!source) {
+    const url2  = url.replace("source=user&", "source=ptt&");
+    const res2  = await fetch(url2, { credentials: "include" });
+    const ptt   = await res2.json();
+    cases = [...cases, ...ptt];
+    // 依時間重新排序
+    cases.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  }
+
+  allCases = cases;
   renderGrid(allCases);
 }
 
 function sourceLabel(s) {
-  return { user: "使用者回報", ptt: "PTT", moa: "農業部" }[s] || s;
+  return { user: "使用者回報", ptt: "PTT" }[s] || s;
 }
 function sourceBadge(s) {
-  const cls = { user: "badge-user", ptt: "badge-ptt", moa: "badge-moa" }[s] || "";
+  const cls = { user: "badge-user", ptt: "badge-ptt" }[s] || "";
   return `<span class="badge ${cls}">${sourceLabel(s)}</span>`;
 }
 function statusBadge(s) {
@@ -106,7 +123,7 @@ async function openModal(id) {
     ${c.location ? `<p class="modal-location">📍 ${c.location}</p>` : ""}
     ${c.description ? `<p class="modal-desc">${c.description.replace(/\n/g,'<br>')}</p>` : ""}
     <p class="modal-meta">回報時間：${c.created_at}　｜　回報者：${c.username || c.display_name || "匿名"}</p>
-    ${c.status === "handled" ? `<p class="modal-meta handled-by">已由使用者處理於 ${c.handled_at}</p>` : ""}
+    ${c.status === "handled" ? `<p class="modal-meta handled-by">已處理於 ${c.handled_at}</p>` : ""}
     <div class="modal-actions">${handleBtn} ${pttLink}</div>
     <hr class="divider-line">
     <h3>處理筆記</h3>
@@ -120,13 +137,11 @@ async function handleCase(id) {
   openModal(id);
   loadCases();
 }
-
 async function reopenCase(id) {
   await fetch(`/api/cases/${id}/reopen`, { method: "POST", credentials: "include" });
   openModal(id);
   loadCases();
 }
-
 async function addNote(id) {
   const note = document.getElementById("note-input").value.trim();
   if (!note) return;
@@ -138,11 +153,9 @@ async function addNote(id) {
   openModal(id);
 }
 
-// ── 關閉 Modal ────────────────────────────────────────────
 document.getElementById("modal-close").onclick = () => overlay.style.display = "none";
 overlay.onclick = (e) => { if (e.target === overlay) overlay.style.display = "none"; };
 
-// ── 篩選器 ────────────────────────────────────────────────
 ["filter-status", "filter-animal", "filter-source"].forEach(id => {
   document.getElementById(id)?.addEventListener("change", loadCases);
 });
